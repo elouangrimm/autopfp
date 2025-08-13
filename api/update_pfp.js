@@ -71,7 +71,7 @@ export default async function handler(request, response) {
             },
         });
 
-        console.log("🎉 Success! Profile has been updated.");
+        console.log(`Success!!! Updated to: ${chosenPfpFile}`);
         // Send a success response back to Vercel
         response.status(200).send(`Profile updated with ${chosenPfpFile}!`);
 
