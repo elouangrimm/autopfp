@@ -2,6 +2,14 @@
 
 Automatically updates your Bluesky profile picture from a collection of images.
 
+## Homepage
+
+Visit the homepage (`/` or `/index.html`) to see a simple web interface where you can:
+- Click a button to update the profile picture
+- See which image was selected
+- View rate limit information
+- Get instant feedback on the update status
+
 ## Endpoints
 
 ### 1. `/api/update_pfp` (Authenticated)
