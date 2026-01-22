@@ -11,6 +11,9 @@ const rateLimitStore = new Map();
  * @returns {Promise<{success: boolean, remaining: number, resetTime: number}>}
  */
 export async function checkRateLimit(identifier, maxRequests = 10, windowMs = 3600000) {
+    // Periodically clean up old entries
+    cleanupRateLimitStore();
+    
     const now = Date.now();
     const record = rateLimitStore.get(identifier);
 
@@ -63,15 +66,13 @@ export async function checkRateLimit(identifier, maxRequests = 10, windowMs = 36
 
 /**
  * Clean up old entries from the rate limit store
+ * Called on-demand during rate limit checks
  */
 export function cleanupRateLimitStore() {
     const now = Date.now();
     for (const [key, value] of rateLimitStore.entries()) {
-        if (now > value.resetTime) {
+        if (now > value.resetTime + (60 * 60 * 1000)) { // Clean up entries 1 hour after expiry
             rateLimitStore.delete(key);
         }
     }
 }
-
-// Cleanup old entries every 10 minutes
-setInterval(cleanupRateLimitStore, 10 * 60 * 1000);

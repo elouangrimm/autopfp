@@ -16,10 +16,19 @@ function getClientIP(request) {
         return forwarded.split(',')[0].trim();
     }
     
-    return request.headers['x-real-ip'] 
-        || request.connection?.remoteAddress 
-        || request.socket?.remoteAddress
-        || 'unknown';
+    const realIP = request.headers['x-real-ip'];
+    if (realIP) {
+        return realIP;
+    }
+    
+    const remoteAddr = request.connection?.remoteAddress || request.socket?.remoteAddress;
+    if (remoteAddr) {
+        return remoteAddr;
+    }
+    
+    // If we can't determine IP, use a very restrictive shared pool
+    // This prevents abuse from unidentifiable sources
+    return 'unknown-shared-pool';
 }
 
 /**
